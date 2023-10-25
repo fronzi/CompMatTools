@@ -45,20 +45,11 @@ from pymatgen.analysis.phase_diagram import PhaseDiagram, PDPlotter, CompoundPha
 path = "/Users/marco/Dropbox/Work/WORKING_DIR_UNIMELB/GraphiteSiBatteries/Data/"
 
 # Initialize MPRester and get the phase diagram
-mpr = MPRester("6NN5rK4gahmRJCdlBuhNpGpueNgkOgDd")
-# comp = "Si-Li-O"
-# comp = "Si-Li-C"
-# comp = "Si-O-C"
-# comp = "Si-Li-F"
-# comp = "Si-Li-F"
-# comp = "Si-C-F"
-# comp = "Si-O-F"
-# comp = "C-Li-O"
-# comp = "C-Li-F"
+mpr = MPRester("API-KEY")
+
 comp = ["Si","Li","C","O"]
-# comp = Compositio["Si-Li-C-O"]
-comp = Composition({'Si': 1, 'Li': 1})
-# comp2 = Elements(comp)
+
+
 entries = mpr.get_entries_in_chemsys(comp)
 
 formulas = []
@@ -189,52 +180,52 @@ phases.savefig(path+'1+O.png',dpi=600)
 
 
 # # Plot the lattice constants distribution
-# fig, ax = plt.subplots()
-# ax.hist(df['Lattice Constant'],bins=200)
-# ax.set_title('Lattice Constants Distribution')
-# ax.set_xlabel('Lattice Constant (Angstroms)')
-# ax.set_ylabel('Counts')
-# ax.tick_params(axis='x', labelsize=18, rotation=0)
-# plt.tight_layout()
-# plt.savefig(path+'LatticeConst',dpi=600)
-# plt.show()
+fig, ax = plt.subplots()
+ax.hist(df['Lattice Constant'],bins=200)
+ax.set_title('Lattice Constants Distribution')
+ax.set_xlabel('Lattice Constant (Angstroms)')
+ax.set_ylabel('Counts')
+ax.tick_params(axis='x', labelsize=18, rotation=0)
+plt.tight_layout()
+plt.savefig(path+'LatticeConst',dpi=600)
+plt.show()
 
 # # Plot the crystal system distribution
-# fig, ax = plt.subplots()
-# ax.hist(df['Crystal System'])
-# ax.set_title('Crystal System Distribution')
-# ax.set_xlabel('Crystal System')
-# ax.set_ylabel('Counts')
-# ax.tick_params(axis='x', labelsize=20, rotation=90)
-# plt.tight_layout()
-# plt.savefig(path+'CrystalSystem',dpi=600)
-# plt.show()
+fig, ax = plt.subplots()
+ax.hist(df['Crystal System'])
+ax.set_title('Crystal System Distribution')
+ax.set_xlabel('Crystal System')
+ax.set_ylabel('Counts')
+ax.tick_params(axis='x', labelsize=20, rotation=90)
+plt.tight_layout()
+plt.savefig(path+'CrystalSystem',dpi=600)
+plt.show()
 
-# # Plot the space group distribution
-# fig, ax = plt.subplots()
-# ax.hist(df['Space Group'], bins=400)
-# ax.set_title('Space Group Distribution')
-# ax.set_xlabel('Space Group')
-# ax.set_ylabel('Counts')
-# ax.tick_params(axis='x', labelsize=4, rotation=90)
-# plt.tight_layout()
-# plt.savefig(path+'SpaceGroup',dpi=600)
-# plt.show()
+# Plot the space group distribution
+fig, ax = plt.subplots()
+ax.hist(df['Space Group'], bins=400)
+ax.set_title('Space Group Distribution')
+ax.set_xlabel('Space Group')
+ax.set_ylabel('Counts')
+ax.tick_params(axis='x', labelsize=4, rotation=90)
+plt.tight_layout()
+plt.savefig(path+'SpaceGroup',dpi=600)
+plt.show()
 
 
-sys.exit(-1)
+
 
 ###############################################################################
 ###  geberate POSCAR files and diuagram stability DFT 
 ################################################################################
     
 
-# for i, entry in enumerate(entries):
-#     structure = entry.structure
-#     poscar = structure.to(fmt="poscar")
-#     file_path = os.path.join(path, f"poscar_{i}.vasp")
-#     with open(file_path, "w") as f:
-#         f.write(poscar)
+for i, entry in enumerate(entries):
+    structure = entry.structure
+    poscar = structure.to(fmt="poscar")
+    file_path = os.path.join(path, f"poscar_{i}.vasp")
+    with open(file_path, "w") as f:
+        f.write(poscar)
   
 
 
@@ -255,8 +246,6 @@ stability2.show()
 
 
 
-
-sys.exit(-1)
 
 
 
@@ -336,7 +325,6 @@ df = pd.DataFrame(all_descriptors, columns=descriptors.feature_labels())
 
 
 
-sys.exit(-1)
 
 
 
@@ -344,61 +332,5 @@ sys.exit(-1)
 
 
 
-
-###############################################################################
-###  ML to be fixed
-################################################################################
-    
-import os
-import pandas as pd
-from matminer.featurizers.structure import SiteStatsFingerprint
-from matminer.utils.io import load_dataframe_from_json
-from sklearn.externals import joblib
-import joblib
-
-# Define the path to the directory containing the POSCAR files
-
-
-# Define the featurizer to use
-featurizer = SiteStatsFingerprint.from_preset("CoordinationNumber_ward-prb-2017")
-
-# Load the pre-trained models
-# elasticity_model = joblib.load("elasticity_model.joblib")
-formation_energy_model = joblib.load("formation_energy_model.joblib")
-
-# Define a function to predict the stability of a single structure
-def predict_stability(path):
-    # Load the structure from the POSCAR file
-    structure = Structure.from_file(poscar_path)
-
-    # Compute features for the structure
-    features = featurizer.featurize(structure)
-
-    # Convert features to a pandas DataFrame
-    df = pd.DataFrame(features).transpose()
-
-    # Use the models to predict the stability of the structure
-    # elasticity = elasticity_model.predict(df)[0]
-    formation_energy = formation_energy_model.predict(df)[0]
-
-    # return {"elasticity": elasticity, "formation_energy": formation_energy}
-    return { "formation_energy": formation_energy}
-
-# Loop over all POSCAR files in the directory and predict their stability
-results = {}
-for filename in os.listdir(path):
-    if filename.endswith(".POSCAR"):
-        poscar_path = os.path.join(path, filename)
-        results[filename] = predict_stability(poscar_path)
-
-# Print the results
-for filename, result in results.items():
-    print(filename, result)
-
-
-
-################################################################################
-################################################################################
-################################################################################
 
 
