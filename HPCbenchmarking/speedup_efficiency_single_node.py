@@ -12,7 +12,7 @@ label_fontsize = 22
 tick_label_fontsize = 20
 
 # Read data from the CSV file
-df = pd.read_csv('222_111kp_CPU_scf.csv')
+df = pd.read_csv('SCF_222_111kp.csv')
 
 # Ensure data types are correct, especially for numbers
 df['SCF Time'] = pd.to_numeric(df['SCF Time'], errors='coerce')
