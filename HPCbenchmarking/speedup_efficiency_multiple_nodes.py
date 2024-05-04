@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 # Load data
-df = pd.read_csv('SCF_222_111kp.csv')
+df = pd.read_csv('SCF_222_222kp.csv')
 
 # Convert columns to numeric, ensuring all data is correctly typed
 df['SCF Time'] = pd.to_numeric(df['SCF Time'], errors='coerce')
