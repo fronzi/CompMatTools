@@ -39,7 +39,7 @@ This script analyzes the impact of OpenMP parallelism on calculation time and vi
 
 ## Contributors
 
-- [Marco Fronzi](https://github.com/marcofronzi)
+- [Marco Fronzi](https://github.com/fronzi)
 
 ## License
 
