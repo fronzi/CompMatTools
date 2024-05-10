@@ -1,4 +1,4 @@
-# Layer Distance Classifier README
+#  Interlayer Atomic Distance Classifier README
 
 ## Overview
 This script is designed to analyze POSCAR files using the Atomic Simulation Environment (ASE) to determine and classify distances between atoms within the same z-layers of a crystal structure.
