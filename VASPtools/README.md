@@ -8,7 +8,7 @@
 This repository contains Python scripts designed for analyzing and processing electronic structure data from computational materials science simulations using VASP outputs.
 
 
-### 0. X.py
+### 0. oscar-interlayer-distances.py
 This script is designed to analyze POSCAR files using the Atomic Simulation Environment (ASE) to determine and classify distances between atoms within the same z-layers of a crystal structure.
 It groups these distances based on a specified tolerance, allowing for detailed examination of atomic arrangements and potentially identifying significant structural features.
 
