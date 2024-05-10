@@ -1,24 +1,18 @@
 #  Interlayer Atomic Distance Classifier README
 
 ## Overview
-This script is designed to analyze POSCAR files using the Atomic Simulation Environment (ASE) to determine and classify distances between atoms within the same z-layers of a crystal structure.
-It groups these distances based on a specified tolerance, allowing for detailed examination of atomic arrangements and potentially identifying significant structural features.
-
-## Requirements
-- Python 3.x
-- ASE (Atomic Simulation Environment) package
-
-## Installation
-Ensure Python and pip are already installed on your system. You can install ASE using pip:
-```bash
-pip install ase
 
 
-# Repository Detailed README.md
+
 
 This repository contains Python scripts designed for analyzing and processing electronic structure data from computational materials science simulations using VASP outputs.
 
-## Scripts Overview
+
+### 0. X.py
+This script is designed to analyze POSCAR files using the Atomic Simulation Environment (ASE) to determine and classify distances between atoms within the same z-layers of a crystal structure.
+It groups these distances based on a specified tolerance, allowing for detailed examination of atomic arrangements and potentially identifying significant structural features.
+
+
 
 ### 1. BandGap_collect_save.py
 **Function:** Extracts band gap information from multiple `vasprun.xml` files located within a specified directory, collating results into a CSV file.
