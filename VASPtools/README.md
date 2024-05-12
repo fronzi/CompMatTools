@@ -1,4 +1,4 @@
-#  Interlayer Atomic Distance Classifier README
+#  VASP pre and post processing tools
 
 ## Overview
 
