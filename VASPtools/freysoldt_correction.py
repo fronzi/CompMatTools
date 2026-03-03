@@ -31,7 +31,7 @@ from doped.analysis import DefectParser
 # ---------------------------------------------------------------------------
 bulk_path = "/home/562/mxf562/storagejm11/DATA/Diamond_Bulk/444_pristine_spin2/neutral/PBE"
 nv0_path  = "/home/562/mxf562/storagejm11/DATA/Diamond_Bulk/444_gamma_0_PBE_HSE_CAM/PBE/LOC"
-nvm_path  = "/home/562/mxf562/storagejm11/DATA/Diamond_Bulk/444_gamma_PBE_HSE_CAM/PBE/LOC"
+nvm_path  = "/home/562/mxf562/storagejm11/DATA/Diamond_Bulk/444_gamma_PBE_HSE_CAM/PBE"
 
 DIELECTRIC = 5.7   # isotropic dielectric constant for diamond
 
@@ -117,11 +117,16 @@ print(f"NV-  - bulk:     {E_nvm - E_bulk:.4f} eV")
 # ---------------------------------------------------------------------------
 # 6. Band edges from bulk
 # ---------------------------------------------------------------------------
-cbm = bulk_vr.eigenvalue_band_properties[0]
-vbm = bulk_vr.eigenvalue_band_properties[1]
-gap = bulk_vr.eigenvalue_band_properties[2]
+#cbm = bulk_vr.eigenvalue_band_properties[0]
+#vbm = bulk_vr.eigenvalue_band_properties[1]
+#gap = bulk_vr.eigenvalue_band_properties[2]
 
-print(f"\nVBM: {vbm:.4f} eV  |  CBM: {cbm:.4f} eV  |  Gap: {gap:.4f} eV")
+#print(f"\nVBM: {vbm:.4f} eV  |  CBM: {cbm:.4f} eV  |  Gap: {gap:.4f} eV")
+
+
+band_gap, cbm, vbm, is_direct = bulk_vr.eigenvalue_band_properties
+
+print(f"\nVBM: {vbm:.4f} eV  |  CBM: {cbm:.4f} eV  |  Gap: {band_gap:.4f} eV")
 
 # ---------------------------------------------------------------------------
 # 7. Charge transition level ε(0/-)
