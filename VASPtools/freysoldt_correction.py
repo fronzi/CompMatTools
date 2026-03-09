@@ -28,8 +28,8 @@ from doped.analysis import DefectParser
 # Paths
 # ---------------------------------------------------------------------------
 bulk_path = "/home/562/mxf562/storagejm11/DATA/Diamond_Bulk/444_pristine_spin2/neutral/PBE"
-nv0_path  = "/home/562/mxf562/storagejm11/DATA/Diamond_Bulk/444_gamma_0_PBE_HSE_CAM/PBE/LOC"
-nvm_path  = "/home/562/mxf562/storagejm11/DATA/Diamond_Bulk/444_gamma_PBE_HSE_CAM/PBE"
+nv0_path  = "/home/562/mxf562/storagejm11/DATA/Diamond_Bulk/444_gamma_0_PBE_HSE_CAM/PBE/ES1"
+nvm_path  = "/home/562/mxf562/storagejm11/DATA/Diamond_Bulk/444_gamma_PBE_HSE_CAM/PBE/ES1"
 
 DIELECTRIC = 5.7
 
