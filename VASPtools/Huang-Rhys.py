@@ -17,6 +17,23 @@ Configuration coordinate diagram:
   - E_rel_es = E_es(R_gs) - E_es(R_es) = S_abs * ħω
   - E_rel_gs = E_gs(R_es) - E_gs(R_gs) = S_em  * ħω
 
+
+   # 4 required runs:
+   gs/CONTCAR + gs/OUTCAR          ← relaxed GS
+   es/CONTCAR + es/OUTCAR          ← relaxed ES  (DELTASPIN / constrained occ.)
+   gs_sp/OUTCAR                    ← GS functional, ES geometry (NSW=0)
+   es_sp/OUTCAR                    ← ES functional, GS geometry (NSW=0)
+   phonons/OUTCAR                  ← IBRION=6, NFREE=2 (optional)
+   
+   
+   python huang_rhys.py vasp \
+     --gs-poscar gs/CONTCAR --es-poscar es/CONTCAR \
+     --gs-outcar gs/OUTCAR  --es-outcar es/OUTCAR  \
+     --gs-sp-outcar gs_sp/OUTCAR --es-sp-outcar es_sp/OUTCAR \
+     --phonon-outcar phonons/OUTCAR --plot
+
+
+
 Units:
   - Energies: eV throughout
   - Displacements: Å
@@ -1064,7 +1081,7 @@ def _demo():
         HRPlotter.spectral_function(result2, ax=axes[1])
         HRPlotter.partial_HR_bar(result2, top_n=20, ax=axes[2])
         plt.tight_layout()
-        out = "/mnt/user-data/outputs/hr_demo.png"
+        out = "./hr_demo.png"
         plt.savefig(out, dpi=150)
         print(f"\n  Plot saved → {out}")
         plt.close()
