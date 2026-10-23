@@ -1,68 +1,67 @@
 #!/usr/bin/env python3
-"""
-plot_pdos_template.py -- pDOS da VASP, formato riusabile fra manoscritti.
+"""plot_pdos_template.py -- projected DOS from VASP, in a format reusable across manuscripts.
 
-Generalizzazione di plot_pdos.py (figure Gr/CuO e Gr/AgO). Stesse convenzioni
-grafiche, niente piu' cucito sul sistema: nessun elemento nel codice, nessun
-conteggio di atomi fisso, nessuna modalita' legata a un'affermazione specifica.
+Generalisation of plot_pdos.py (the Gr/CuO and Gr/AgO figures). Same plotting
+conventions, nothing hard-wired to a particular system: no element names in
+the code, no fixed atom counts, no mode tied to a specific claim.
 
-CONVENZIONI, che sono la parte da riusare
-  * Energie riferite a E_F (o al VBM con --ref vbm), riga verticale a zero.
-  * Spin su positivo, spin giu' negativo e specchiato, con la riga orizzontale
-    a zero: la simmetria di un sottoreticolo AFM si vede a occhio.
-  * Curve riempite con bordo piu' scuro; un solo asse, nessun asse doppio.
-  * Palette sicura per daltonismo; ogni serie ha anche uno stile di linea
-    proprio, cosi' la figura sopravvive alla stampa in grigio.
-  * ISPIN = 1 non ha il canale giu': l'asse diventa a un lato solo invece di
-    lasciare mezzo pannello vuoto con l'etichetta "spin giu'" sul nulla.
-  * Gruppi minuscoli (un adsorbato contro uno slab) vengono ingranditi di un
-    fattore scritto NELLA LEGENDA: senza il fattore in legenda la figura e'
-    scorretta, con il fattore e' una scelta di leggibilita'.
+CONVENTIONS (the part worth reusing)
+  * Energies referred to E_F (or to the VBM with --ref vbm); vertical line at zero.
+  * Spin up positive, spin down negative and mirrored, with a horizontal line
+    at zero, so the symmetry of an AFM sublattice is visible at a glance.
+  * Filled curves with a darker edge; a single axis, no twin axis.
+  * Colour-blind-safe palette; every series also has its own line style so the
+    figure survives greyscale printing.
+  * ISPIN = 1 has no spin-down channel: the axis becomes one-sided instead of
+    leaving half a panel empty under a "spin down" label.
+  * Tiny groups (one adsorbate against a slab) are magnified by a factor that
+    is written IN THE LEGEND: without the factor the figure is wrong, with it
+    the magnification is a legibility choice.
 
-IL CENTRO DI BANDA VUOLE LA SUA FINESTRA, SEMPRE SCRITTA
-  epsilon = integral E rho(E) dE / integral rho(E) dE, sulla finestra data.
-  Il valore DIPENDE dalla finestra, e non poco: nel manoscritto AJIF lo stesso
-  centro d usciva -3.49 eV su [-6, 4] e -3.63 eV su [-8, 4], e il confronto
-  fra due sistemi cambiava SEGNO fra le due scelte. Quindi qui la finestra e'
-  un argomento obbligato nel senso che compare sempre: nell'annotazione, nello
-  stdout e nel CSV. Due sistemi confrontati nello stesso testo vanno calcolati
-  sulla stessa finestra, e la finestra va dichiarata nella didascalia.
-  Il default [-inf, 0] e' il centro della banda OCCUPATA, che e' la definizione
-  usata da Hammer-Norskov; --centre-window -8 4 da' la banda intera.
+THE BAND CENTRE NEEDS ITS WINDOW, ALWAYS STATED
+  epsilon = integral E rho(E) dE / integral rho(E) dE over the given window.
+  The value DEPENDS on the window, and not weakly: in the AJIF manuscript the
+  same d-band centre came out at -3.49 eV on [-6, 4] and -3.63 eV on [-8, 4],
+  and the comparison between two systems changed SIGN between the two choices.
+  So here the window is mandatory in the sense that it always appears: in the
+  annotation, on stdout and in the CSV. Two systems compared in the same text
+  must use the same window, and the window must be declared in the caption.
+  The default [-inf, 0] is the centre of the OCCUPIED band, the Hammer-Norskov
+  definition; --centre-window -8 4 gives the whole band.
 
-COSA LEGGE
-  vasprun.xml  preferito: porta E_F, proiezioni orbitali e canali di spin in un
-               solo file. Serve LORBIT = 11 nel calcolo che l'ha prodotto.
+INPUTS
+  vasprun.xml  preferred: carries E_F, orbital projections and spin channels in
+               one file. Requires LORBIT = 11 in the calculation that produced it.
   DOSCAR+POSCAR  fallback.
-  OUTCAR       opzionale, per i momenti per sito: servono a separare i
-               sottoreticoli di un antiferromagnete (vedi --sublattice).
-  Il parser XML e' scritto qui dentro: pymatgen si usa se c'e', ma NON serve.
-  Nessuna dipendenza oltre numpy e matplotlib.
+  OUTCAR       optional, for per-site moments: used to separate the sublattices
+               of an antiferromagnet (see --sublattice).
+  The XML parser is written here: pymatgen is used if present but NOT required.
+  No dependencies beyond numpy and matplotlib.
 
-UNA NOTA SUI DATI, NON SULLO SCRIPT
-  Una DOS liscia vuole una maglia k piu' fitta di quella di un rilassamento.
-  Se le curve sono spigolose il problema non e' lo smoothing: rifai il calcolo
-  non autoconsistente (ICHARG = 11 su un CHGCAR convergito, NEDOS = 3001,
-  KPOINTS piu' fitti). Lo smoothing gaussiano di --smooth e' cosmetico e non
-  sostituisce la maglia: allarga i picchi e abbassa i massimi.
+A NOTE ON THE DATA, NOT THE SCRIPT
+  A smooth DOS needs a denser k-mesh than a relaxation. If the curves are
+  jagged the problem is not the smoothing: redo the calculation
+  non-self-consistently (ICHARG = 11 on a converged CHGCAR, NEDOS = 3001,
+  denser KPOINTS). The Gaussian smoothing in --smooth is cosmetic and does not
+  replace the mesh: it broadens peaks and lowers maxima.
 
-USO
-  # un sistema, decomposizione per elemento e orbitale
-  python3 plot_pdos_template.py scf_dir \\
-      --group "Cu 3d=Cu:d" --group "O 2p=O:p" --group "C 2p=C:p" \\
+USAGE
+  # one system, decomposed by element and orbital
+  python3 plot_pdos_template.py scf_dir \
+      --group "Cu 3d=Cu:d" --group "O 2p=O:p" --group "C 2p=C:p" \
       --centre "Cu 3d" --centre-window -8 4 --out fig_pdos
 
-  # piu' sistemi affiancati, stessa scala
-  python3 plot_pdos_template.py dirA dirB dirC \\
+  # several systems side by side, same scale
+  python3 plot_pdos_template.py dirA dirB dirC \
       --group "metal d=Cu:d" --group "O 2p=O:p" --share-y --out fig_compare
 
-  # antiferromagnete: separa i due sottoreticoli dai momenti in OUTCAR
-  python3 plot_pdos_template.py afm_dir --sublattice Cu:d \\
+  # antiferromagnet: separate the two sublattices from the OUTCAR moments
+  python3 plot_pdos_template.py afm_dir --sublattice Cu:d \
       --group "O 2p=O:p" --out fig_afm
 
-  # adsorbato per indice (1-based, come in VESTA), ingrandito
-  python3 plot_pdos_template.py ads_dir \\
-      --group "slab Cu d=Cu:d" --group "ads C 2p=#63:p" \\
+  # adsorbate by index (1-based, as in VESTA), magnified
+  python3 plot_pdos_template.py ads_dir \
+      --group "slab Cu d=Cu:d" --group "ads C 2p=#63:p" \
       --group "ads O 2p=#64-65:p" --magnify "ads C 2p" --magnify "ads O 2p"
 """
 import argparse
@@ -370,7 +369,7 @@ def load(directory, ref="fermi", prefer_pymatgen=False):
     if ref == "vbm":
         # Per un semiconduttore E_F scritto da VASP cade dentro il gap in un
         # punto che dipende dallo smearing: il VBM e' un riferimento piu'
-        # stabile fra calcoli diversi.
+        # stable across different calculations.
         tot = d.get("total")
         if tot is not None:
             occ = d["E"][(d["E"] <= d["efermi"]) & (tot > 1e-3)]
@@ -616,11 +615,11 @@ def build_series(d, args, directory):
     for spec in args.group:
         groups.append(parse_group(spec, d["symbols"]))
 
-    # Un gruppo che somma a zero NON va disegnato come curva piatta: una linea
-    # a zero si legge come "nessuno stato a questa energia", che e'
-    # un'affermazione fisica, mentre qui vuol dire solo che la proiezione non
-    # c'e' nel file (LORBIT sbagliato, orbitale assente per quell'elemento,
-    # indici sbagliati). Meglio fermarsi che pubblicare una figura muta.
+    # A group that sums to zero must NOT be drawn as a flat curve: a line at
+    # zero reads as "no states at this energy", which is a physical claim,
+    # whereas here it only means the projection is missing from the file
+    # (wrong LORBIT, orbital absent for that element, wrong indices).
+    # Better to stop than to publish a silent figure.
     raw = {}
     empty = []
     for label, idx, orb in groups:

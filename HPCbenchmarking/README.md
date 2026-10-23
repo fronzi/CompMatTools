@@ -4,7 +4,8 @@ This repository contains scripts and tools to estimate code running time, speedu
 
 ## Contents
 
-- `performance_metrics.py`: Python script to calculate and visualize SCF time, speedup, and efficiency across various CPU configurations.
+- `speedup_efficiency_single_node.py`: SCF time, speedup and parallel efficiency versus number of CPUs on a single node (reads `SCF_222_111kp.csv`).
+- `speedup_efficiency_multiple_nodes.py`: the same metrics across 1, 2 and 4 nodes (reads `SCF_222_222kp.csv`).
 - `omp_parallelism.py`: Python script to analyze the impact of OpenMP (OMP) parallelism on calculation time.
 
 ## Requirements
@@ -16,7 +17,7 @@ This repository contains scripts and tools to estimate code running time, speedu
 
 ## Usage
 
-### `performance_metrics.py`
+### `speedup_efficiency_single_node.py`
 
 This script calculates and visualizes SCF time, speedup, and efficiency based on CPU configurations specified in a CSV file.
 
@@ -25,7 +26,7 @@ This script calculates and visualizes SCF time, speedup, and efficiency based on
 1. Ensure you have Python 3.x installed on your system.
 2. Install the required dependencies using `pip install -r requirements.txt`.
 3. Place your data in a CSV file (e.g., `222_111kp_CPU_scf.csv`) organized with columns: `Number of CPUs`, `SCF Time`, and `Number of Nodes`.
-4. Run the script using `python performance_metrics.py`.
+4. Run the script using `python speedup_efficiency_single_node.py`.
 
 ### `omp_parallelism.py`
 
